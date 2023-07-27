@@ -33,7 +33,7 @@ public class OzellestimeManager : MonoBehaviour
     int MaterialIndex = -1;
     public SkinnedMeshRenderer _Renderer;
 
-    [Header("Diger")]
+    [Header("Digerleri")]
     public GameObject[] IslemPanalleri;
     public GameObject IslemCanvas;
     public GameObject[] GenelPanaller;
