@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,9 +6,18 @@ using Yilmaz;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("-----Sapkalar")]
+    public GameObject[] Sapkalar;
+    [Header("-----Sopalar")]
+    public GameObject[] Sopalar;
+    [Header("-----Materialler")]
+    public Material[] Materialler;
+    public SkinnedMeshRenderer _Renderer;
+    public Material DefoultTema;
 
     public static int AnlikKarakterSayisi;
     public List<GameObject> Karakterler;
+    public List<GameObject> BosKarakterler;
     public List<GameObject> OlusmaEfektleri;
     public List<GameObject> YokOlmaEfektleri;
     public List<GameObject> AdamLekesiEfektleri;
@@ -22,18 +32,16 @@ public class GameManager : MonoBehaviour
 
     Matematiksel_islemler _Matematiksel_Islemler = new Matematiksel_islemler();
     BellekYonetim _BellekYonetim = new BellekYonetim();
+    private void Awake()
+    {
+        ItemKontrol();
+    }
     void Start()
     {
 
         DusmanlariOlustur();
         AnlikKarakterSayisi = 1;
-        /*_BellekYonetim.VeriKaydet_string("Ad", "Yilmaz");
-        _BellekYonetim.VeriKaydet_int("Yas", 25);
-        _BellekYonetim.VeriKaydet_float("Puan", 75);*/
-
-        //  Debug.Log(_BellekYonetim.VeriOku_s("Ad"));
-        // Debug.Log(_BellekYonetim.VeriOku_i("Yas"));
-        Debug.Log(_BellekYonetim.VeriOku_f("Puan"));
+    
     }
 
     void SavasDurumu()
@@ -57,10 +65,18 @@ public class GameManager : MonoBehaviour
                         Dusman.GetComponent<Animator>().SetBool("Saldir", false);
                     }
                 }
+                foreach(GameObject bos in BosKarakterler)
+                {
+                    if (bos.activeInHierarchy)
+                    {
+                        bos.GetComponent<Animator>().SetBool("Saldir", false);
+                    }
+                }
                 AnaKarakter.GetComponent<Animator>().SetBool("Saldir", false);
 
                 if (AnlikKarakterSayisi < KacDusmanOlsun || AnlikKarakterSayisi == KacDusmanOlsun)
                 {
+
                     Debug.Log("Kaybettin");
                 }
                 else
@@ -148,5 +164,25 @@ public class GameManager : MonoBehaviour
         }
         if (!OyunBittimi)
             SavasDurumu();
+    }
+
+    public void ItemKontrol()
+    {
+        if (_BellekYonetim.VeriOku_i("AktifSapka")!=-1)
+            Sapkalar[_BellekYonetim.VeriOku_i("AktifSapka")].SetActive(true);
+        if (_BellekYonetim.VeriOku_i("AktifSopa") != -1)
+            Sopalar[_BellekYonetim.VeriOku_i("AktifSopa")].SetActive(true);
+        if (_BellekYonetim.VeriOku_i("AktifTema") != -1)
+        {
+            Material[] mats = _Renderer.materials;
+            mats[0] = Materialler[_BellekYonetim.VeriOku_i("AktifTema")];
+            _Renderer.materials = mats;
+        }
+        else
+        {
+            Material[] mats = _Renderer.materials;
+            mats[0] = DefoultTema;
+            _Renderer.materials = mats;
+        }
     }
 }

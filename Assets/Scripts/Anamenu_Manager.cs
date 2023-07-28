@@ -13,7 +13,7 @@ public class Anamenu_Manager : MonoBehaviour
     void Start()
     {
         _BellekYonetim.KontrolEtTanimla();
-      //  _VeriYonetim.IlkKurulum(_ItemBilgileri);
+        _VeriYonetim.IlkKurulum(_ItemBilgileri);
     }
     public void SahneYukle(int Index)
     {

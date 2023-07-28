@@ -64,6 +64,7 @@ public class BosKarakter : MonoBehaviour
         { 
             _GameManager.YokOlmaEfektiOlustur(PozisyonVer(), false, false);
             gameObject.SetActive(false);
+         
         }
     }
     void MaterialDegis()
