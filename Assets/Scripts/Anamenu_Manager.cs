@@ -6,10 +6,11 @@ using Yilmaz;
 
 public class Anamenu_Manager : MonoBehaviour
 {
+    public AudioSource ButonSes;
     public GameObject CikisPaneli;
     BellekYonetim _BellekYonetim = new BellekYonetim();
-    VeriYonetim _VeriYonetim = new VeriYonetim();   
-    public List<ItemBilgileri> _ItemBilgileri= new List<ItemBilgileri>();
+    VeriYonetim _VeriYonetim = new VeriYonetim();
+    public List<ItemBilgileri> _ItemBilgileri = new List<ItemBilgileri>();
     void Start()
     {
         _BellekYonetim.KontrolEtTanimla();
@@ -17,19 +18,22 @@ public class Anamenu_Manager : MonoBehaviour
     }
     public void SahneYukle(int Index)
     {
+        ButonSes.Play();
         SceneManager.LoadScene(Index);
     }
 
     public void Oyna()
-    {      
+    {
+        ButonSes.Play();
         SceneManager.LoadScene(_BellekYonetim.VeriOku_i("SonLevel"));
     }
     public void CikisBtnIslem(string durum)
     {
+        ButonSes.Play();
         if (durum == "Evet")
             Application.Quit();
 
-       else if (durum == "Cikis")
+        else if (durum == "Cikis")
             CikisPaneli.SetActive(true);
 
         else

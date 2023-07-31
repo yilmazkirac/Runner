@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Yilmaz;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -32,8 +33,11 @@ public class GameManager : MonoBehaviour
 
     Matematiksel_islemler _Matematiksel_Islemler = new Matematiksel_islemler();
     BellekYonetim _BellekYonetim = new BellekYonetim();
+
+    Scene _Scene;
     private void Awake()
     {
+        Destroy(GameObject.FindWithTag("MenuMusic"));
         ItemKontrol();
     }
     void Start()
@@ -41,7 +45,8 @@ public class GameManager : MonoBehaviour
 
         DusmanlariOlustur();
         AnlikKarakterSayisi = 1;
-    
+        _Scene = SceneManager.GetActiveScene();
+
     }
 
     void SavasDurumu()
@@ -65,7 +70,7 @@ public class GameManager : MonoBehaviour
                         Dusman.GetComponent<Animator>().SetBool("Saldir", false);
                     }
                 }
-                foreach(GameObject bos in BosKarakterler)
+                foreach (GameObject bos in BosKarakterler)
                 {
                     if (bos.activeInHierarchy)
                     {
@@ -82,7 +87,9 @@ public class GameManager : MonoBehaviour
                 else
                 {
                     _BellekYonetim.VeriKaydet_float("Puan", _BellekYonetim.VeriOku_f("Puan") + (100f + AnlikKarakterSayisi * 25f));
-                    _BellekYonetim.VeriKaydet_int("SonLevel", _BellekYonetim.VeriOku_i("SonLevel") + 1);
+
+                    if (_Scene.buildIndex == _BellekYonetim.VeriOku_i("SonLevel"))
+                        _BellekYonetim.VeriKaydet_int("SonLevel", _BellekYonetim.VeriOku_i("SonLevel") + 1);
                     Debug.Log("Kazandin");
                 }
             }
@@ -165,10 +172,9 @@ public class GameManager : MonoBehaviour
         if (!OyunBittimi)
             SavasDurumu();
     }
-
     public void ItemKontrol()
     {
-        if (_BellekYonetim.VeriOku_i("AktifSapka")!=-1)
+        if (_BellekYonetim.VeriOku_i("AktifSapka") != -1)
             Sapkalar[_BellekYonetim.VeriOku_i("AktifSapka")].SetActive(true);
         if (_BellekYonetim.VeriOku_i("AktifSopa") != -1)
             Sopalar[_BellekYonetim.VeriOku_i("AktifSopa")].SetActive(true);

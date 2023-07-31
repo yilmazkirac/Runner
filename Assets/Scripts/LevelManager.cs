@@ -5,15 +5,16 @@ using Yilmaz;
 
 public class LevelManager : MonoBehaviour
 {
+    public AudioSource ButonSes;
     public Button[] Butonlar;
-  //  public int Level;
+    //  public int Level;
     public Sprite Kilit;
-    BellekYonetim _BellekYonetim=new BellekYonetim();
+    BellekYonetim _BellekYonetim = new BellekYonetim();
     private void Start()
     {
-      
-        int mevcudLevel = _BellekYonetim.VeriOku_i("SonLevel")-4;
-        int Index =  1;
+
+        int mevcudLevel = _BellekYonetim.VeriOku_i("SonLevel") - 4;
+        int Index = 1;
         for (int i = 0; i < Butonlar.Length; i++)
         {
             if (Index <= mevcudLevel)
@@ -33,10 +34,12 @@ public class LevelManager : MonoBehaviour
 
     public void SahneYukle(int Index)
     {
+        ButonSes.Play();
         SceneManager.LoadScene(Index);
     }
     public void GeriDon()
     {
+        ButonSes.Play();
         SceneManager.LoadScene(0);
     }
 }
