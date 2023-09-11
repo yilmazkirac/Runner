@@ -9,7 +9,7 @@ public class MenuSes : MonoBehaviour
     void Start()
     {
         Ses = GetComponent<AudioSource>();
-        //    Ses.volume = PlayerPrefs.GetFloat("MenuSes");
+        Ses.volume = PlayerPrefs.GetFloat("MenuSes");
         DontDestroyOnLoad(gameObject);
         if (instance == null)
             instance = gameObject;
@@ -20,6 +20,6 @@ public class MenuSes : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        Ses.volume = PlayerPrefs.GetFloat("MenuSes");
     }
 }

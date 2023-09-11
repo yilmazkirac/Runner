@@ -15,7 +15,9 @@ public class Anamenu_Manager : MonoBehaviour
     {
         _BellekYonetim.KontrolEtTanimla();
         _VeriYonetim.IlkKurulum(_ItemBilgileri);
+        ButonSes.volume = _BellekYonetim.VeriOku_f("MenuFx");
     }
+
     public void SahneYukle(int Index)
     {
         ButonSes.Play();

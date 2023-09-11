@@ -71,7 +71,12 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
         _ItemBilgileri = _VeriYonetim.ListeyeAktar();
         DurumuKontrolEt(0, true);
         DurumuKontrolEt(1, true);
-        DurumuKontrolEt(2, true);
+        DurumuKontrolEt(2, true);  
+        foreach (var item in ButonSes)
+        {
+            item.volume = _BellekYonetim.VeriOku_f("MenuFx");
+        }
+  
 
         //    _BellekYonetim.VeriKaydet_int("Puan", 1500);
         PuanText.text = _BellekYonetim.VeriOku_i("Puan").ToString();

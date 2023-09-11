@@ -12,8 +12,8 @@ public class LevelManager : MonoBehaviour
     BellekYonetim _BellekYonetim = new BellekYonetim();
     private void Start()
     {
-
-        int mevcudLevel = _BellekYonetim.VeriOku_i("SonLevel") - 4;
+    ButonSes.volume = _BellekYonetim.VeriOku_f("MenuFx");
+    int mevcudLevel = _BellekYonetim.VeriOku_i("SonLevel") - 4;
         int Index = 1;
         for (int i = 0; i < Butonlar.Length; i++)
         {
