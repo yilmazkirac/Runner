@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Yilmaz;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -36,10 +37,17 @@ public class GameManager : MonoBehaviour
 
     Scene _Scene;
 
-    public AudioSource OyunSesi;
+    public AudioSource[] OyunSesleri;
+
+    public GameObject[] IslemPanalleri;
+    public Slider Sesayar;
+
+    bool ayar=false;
     private void Awake()
     {
-        OyunSesi.volume=_BellekYonetim.VeriOku_f("OyunSes");
+        OyunSesleri[0].volume=_BellekYonetim.VeriOku_f("OyunSes");
+        Sesayar.value= _BellekYonetim.VeriOku_f("OyunSes");
+        OyunSesleri[1].volume=_BellekYonetim.VeriOku_f("MenuFx");
         Destroy(GameObject.FindWithTag("MenuMusic"));
         ItemKontrol();
     }
@@ -51,7 +59,56 @@ public class GameManager : MonoBehaviour
         _Scene = SceneManager.GetActiveScene();
 
     }
+    public void CikisBtnIslem(string durum)
+    {
+        OyunSesleri[1].Play();
+        Time.timeScale = 0;
+        if (durum == "durdur")
+        {
+            IslemPanalleri[0].SetActive(true);
+        }
+        
 
+         else if (durum == "devamet")
+        {
+            IslemPanalleri[0].SetActive(false);
+            Time.timeScale = 1;
+        }
+
+        else if (durum == "tekrar")
+        {
+            SceneManager.LoadScene(_Scene.buildIndex);
+            Time.timeScale = 1;
+        }
+        else if (durum == "anasayfa")
+        {
+            SceneManager.LoadScene(0);
+            Time.timeScale = 1;
+        }
+
+    }
+    public void Sesiayarla()
+    {
+        _BellekYonetim.VeriKaydet_float("OyunSes",Sesayar.value);
+        OyunSesleri[0].volume=Sesayar.value;
+    }
+    public void Ayarlar()
+    {
+        
+        if (!ayar)
+        {
+            IslemPanalleri[1].SetActive(true);
+            Time.timeScale = 0;
+            ayar =true;
+        }
+        else
+        {
+            IslemPanalleri[1].SetActive(false);
+            Time.timeScale = 1;
+            ayar=false;
+        }
+
+    }
     void SavasDurumu()
     {
         if (SonaGeldikmi)
@@ -99,6 +156,7 @@ public class GameManager : MonoBehaviour
         }
 
     }
+
     public void DusmanlariTetikle()
     {
 
@@ -194,4 +252,5 @@ public class GameManager : MonoBehaviour
             _Renderer.materials = mats;
         }
     }
+
 }
