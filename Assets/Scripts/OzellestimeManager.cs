@@ -48,7 +48,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
     public GameObject IslemCanvas;
     public GameObject[] GenelPanaller;
     public Button[] IslemButonlari;
-    public TextMeshProUGUI SatinalmaText;
+
     public Text PuanText;
     public List<ItemBilgileri> _ItemBilgileri = new List<ItemBilgileri>();
     public Animator Kaydedildi_Animator;
@@ -58,9 +58,11 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
     public AudioSource[] ButonSes;
     int IslemPanelindex;
 
-
-
-
+    List<DilVerileri> _DilOkunanVerileri = new List<DilVerileri>();
+    public List<DilVerileri> _DilTercihi = new List<DilVerileri>();
+    public Text[] Text;
+    string ItemText;
+    string SatinalmaText;
     private void Start()
     {
         /*_BellekYonetim.VeriKaydet_int("AktifSapka", -1);
@@ -81,8 +83,32 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
         //    _BellekYonetim.VeriKaydet_int("Puan", 1500);
         PuanText.text = _BellekYonetim.VeriOku_i("Puan").ToString();
 
+        _VeriYonetim.Dil_Load();
+        _DilOkunanVerileri = _VeriYonetim.DilVerileriListeyeAktar();
+        _DilTercihi.Add(_DilOkunanVerileri[1]);
+        DiltercihiYonetimi();
 
-
+    }
+    public void DiltercihiYonetimi()
+    {
+        if (_BellekYonetim.VeriOku_s("Dil") == "TR")
+        {
+            for (int i = 0; i < Text.Length; i++)
+            {
+                Text[i].text = _DilTercihi[0]._Dilverileri_TR[i].Metin;
+            }
+            ItemText= _DilTercihi[0]._Dilverileri_TR[4].Metin;
+            SatinalmaText = _DilTercihi[0]._Dilverileri_TR[5].Metin;
+        }
+        else
+        {
+            for (int i = 0; i < Text.Length; i++)
+            {
+                Text[i].text = _DilTercihi[0]._Dilverileri_EN[i].Metin;
+            }
+            ItemText = _DilTercihi[0]._Dilverileri_EN[4].Metin;
+            SatinalmaText = _DilTercihi[0]._Dilverileri_EN[5].Metin;
+        }
     }
     public void Sapka_Butonlari(string islem)
     {
@@ -97,7 +123,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
 
                 if (!_ItemBilgileri[SapkaIndex].SatinAlmaDurumu)
                 {
-                    SatinalmaText.text = _ItemBilgileri[SapkaIndex].Puan + "-SATIN AL";
+                    Text[5].text = _ItemBilgileri[SapkaIndex].Puan + "-"+SatinalmaText;
                     IslemButonlari[1].interactable = false;
                     if (_BellekYonetim.VeriOku_i("Puan") < _ItemBilgileri[SapkaIndex].Puan)
                         IslemButonlari[0].interactable = false;
@@ -108,7 +134,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                 }
                 else
                 {
-                    SatinalmaText.text = "SATIN AL";
+                    Text[5].text = SatinalmaText;
                     IslemButonlari[0].interactable = false;
                     IslemButonlari[1].interactable = true;
                 }
@@ -121,7 +147,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                 SapkaText.text = _ItemBilgileri[SapkaIndex].ItemAd;
                 if (!_ItemBilgileri[SapkaIndex].SatinAlmaDurumu)
                 {
-                    SatinalmaText.text = _ItemBilgileri[SapkaIndex].Puan + "-SATIN AL";
+                    Text[5].text = _ItemBilgileri[SapkaIndex].Puan + "-"+SatinalmaText;
                     IslemButonlari[1].interactable = false;
                     if (_BellekYonetim.VeriOku_i("Puan") < _ItemBilgileri[SapkaIndex].Puan)
                         IslemButonlari[0].interactable = false;
@@ -130,7 +156,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                 }
                 else
                 {
-                    SatinalmaText.text = "SATIN AL";
+                    Text[5].text = SatinalmaText;
                     IslemButonlari[0].interactable = false;
                     IslemButonlari[1].interactable = true;
                 }
@@ -164,7 +190,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                     SapkaText.text = _ItemBilgileri[SapkaIndex].ItemAd;
                     if (!_ItemBilgileri[SapkaIndex].SatinAlmaDurumu)
                     {
-                        SatinalmaText.text = _ItemBilgileri[SapkaIndex].Puan + "-SATIN AL";
+                        Text[5].text = _ItemBilgileri[SapkaIndex].Puan + "-"+SatinalmaText;
                         IslemButonlari[1].interactable = false;
                         if (_BellekYonetim.VeriOku_i("Puan") < _ItemBilgileri[SapkaIndex].Puan)
                             IslemButonlari[0].interactable = false;
@@ -173,7 +199,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                     }
                     else
                     {
-                        SatinalmaText.text = "SATIN AL";
+                        Text[5].text = SatinalmaText;
                         IslemButonlari[0].interactable = false;
                         IslemButonlari[1].interactable = true;
                     }
@@ -181,8 +207,8 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                 else
                 {
                     SapkaButonlari[0].interactable = false;
-                    SapkaText.text = "Sapka Yok";
-                    SatinalmaText.text = "SATIN AL";
+                    SapkaText.text = ItemText;
+                    Text[5].text = SatinalmaText;
                     IslemButonlari[0].interactable = false;
 
                 }
@@ -191,8 +217,8 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
             else
             {
                 SapkaButonlari[0].interactable = false;
-                SapkaText.text = "Sapka Yok";
-                SatinalmaText.text = "SATIN AL";
+                SapkaText.text = ItemText;
+                Text[5].text = SatinalmaText;
                 IslemButonlari[0].interactable = false;
 
             }
@@ -218,7 +244,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
 
                 if (!_ItemBilgileri[SopaIndex + 3].SatinAlmaDurumu)
                 {
-                    SatinalmaText.text = _ItemBilgileri[SopaIndex + 3].Puan + "-SATIN AL";
+                    Text[5].text = _ItemBilgileri[SopaIndex + 3].Puan + "-"+SatinalmaText;
                     IslemButonlari[1].interactable = false;
                     if (_BellekYonetim.VeriOku_i("Puan") < _ItemBilgileri[SopaIndex + 3].Puan)
                         IslemButonlari[0].interactable = false;
@@ -227,7 +253,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                 }
                 else
                 {
-                    SatinalmaText.text = "SATIN AL";
+                    Text[5].text = SatinalmaText;
                     IslemButonlari[0].interactable = false;
                     IslemButonlari[1].interactable = true;
                 }
@@ -241,7 +267,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
 
                 if (!_ItemBilgileri[SopaIndex + 3].SatinAlmaDurumu)
                 {
-                    SatinalmaText.text = _ItemBilgileri[SopaIndex + 3].Puan + "-SATIN AL";
+                    Text[5].text = _ItemBilgileri[SopaIndex + 3].Puan + "-"+SatinalmaText;
                     IslemButonlari[1].interactable = false;
                     if (_BellekYonetim.VeriOku_i("Puan") < _ItemBilgileri[SopaIndex + 3].Puan)
                         IslemButonlari[0].interactable = false;
@@ -250,7 +276,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                 }
                 else
                 {
-                    SatinalmaText.text = "SATIN AL";
+                    Text[5].text = SatinalmaText;
                     IslemButonlari[0].interactable = false;
                     IslemButonlari[1].interactable = true;
                 }
@@ -284,7 +310,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                     SopaText.text = _ItemBilgileri[SopaIndex + 3].ItemAd;
                     if (!_ItemBilgileri[SopaIndex + 3].SatinAlmaDurumu)
                     {
-                        SatinalmaText.text = _ItemBilgileri[SopaIndex + 3].Puan + "-SATIN AL";
+                        Text[5].text = _ItemBilgileri[SopaIndex + 3].Puan + "-"+SatinalmaText;
                         IslemButonlari[1].interactable = false;
                         if (_BellekYonetim.VeriOku_i("Puan") < _ItemBilgileri[SopaIndex + 3].Puan)
                             IslemButonlari[0].interactable = false;
@@ -293,7 +319,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                     }
                     else
                     {
-                        SatinalmaText.text = "SATIN AL";
+                        Text[5].text = SatinalmaText;
                         IslemButonlari[0].interactable = false;
                         IslemButonlari[1].interactable = true;
                     }
@@ -301,8 +327,8 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                 else
                 {
                     SopaButonlari[0].interactable = false;
-                    SopaText.text = "Sopa Yok";
-                    SatinalmaText.text = "SATIN AL";
+                    SopaText.text = ItemText;
+                    Text[5].text = SatinalmaText;
                     IslemButonlari[0].interactable = false;
 
                 }
@@ -311,8 +337,8 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
             else
             {
                 SopaButonlari[0].interactable = false;
-                SopaText.text = "Sopa Yok";
-                SatinalmaText.text = "SATIN AL";
+                SopaText.text = ItemText;
+                Text[5].text = SatinalmaText;
                 IslemButonlari[0].interactable = false;
 
             }
@@ -340,7 +366,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
 
                 if (!_ItemBilgileri[MaterialIndex + 6].SatinAlmaDurumu)
                 {
-                    SatinalmaText.text = _ItemBilgileri[MaterialIndex + 6].Puan + "-SATIN AL";
+                    Text[5].text = _ItemBilgileri[MaterialIndex + 6].Puan + "-"+SatinalmaText;
                     IslemButonlari[1].interactable = false;
                     if (_BellekYonetim.VeriOku_i("Puan") < _ItemBilgileri[MaterialIndex + 6].Puan)
                         IslemButonlari[0].interactable = false;
@@ -349,7 +375,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                 }
                 else
                 {
-                    SatinalmaText.text = "SATIN AL";
+                    Text[5].text = SatinalmaText;
                     IslemButonlari[0].interactable = false;
                     IslemButonlari[1].interactable = true;
                 }
@@ -365,7 +391,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
 
                 if (!_ItemBilgileri[MaterialIndex + 6].SatinAlmaDurumu)
                 {
-                    SatinalmaText.text = _ItemBilgileri[MaterialIndex + 6].Puan + "-SATIN AL";
+                    Text[5].text = _ItemBilgileri[MaterialIndex + 6].Puan + "-"+SatinalmaText;
                     IslemButonlari[1].interactable = false;
                     if (_BellekYonetim.VeriOku_i("Puan") < _ItemBilgileri[MaterialIndex + 6].Puan)
                         IslemButonlari[0].interactable = false;
@@ -374,7 +400,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                 }
                 else
                 {
-                    SatinalmaText.text = "SATIN AL";
+                    Text[5].text = SatinalmaText;
                     IslemButonlari[0].interactable = false;
                     IslemButonlari[1].interactable = true;
                 }
@@ -411,7 +437,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
 
                     if (!_ItemBilgileri[MaterialIndex + 6].SatinAlmaDurumu)
                     {
-                        SatinalmaText.text = _ItemBilgileri[MaterialIndex + 6].Puan + "-SATIN AL";
+                        Text[5].text = _ItemBilgileri[MaterialIndex + 6].Puan + "-"+SatinalmaText;
                         IslemButonlari[1].interactable = false;
                         if (_BellekYonetim.VeriOku_i("Puan") < _ItemBilgileri[MaterialIndex + 6].Puan)
                             IslemButonlari[0].interactable = false;
@@ -420,7 +446,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                     }
                     else
                     {
-                        SatinalmaText.text = "SATIN AL";
+                        Text[5].text = SatinalmaText;
                         IslemButonlari[0].interactable = false;
                         IslemButonlari[1].interactable = true;
                     }
@@ -431,9 +457,9 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                     Material[] mats = _Renderer.materials;
                     mats[0] = DefoultTema;
                     _Renderer.materials = mats;
-                    MaterialText.text = "Tema Yok";
+                    MaterialText.text = ItemText;
 
-                    SatinalmaText.text = "SATIN AL";
+                    Text[5].text = SatinalmaText;
                     IslemButonlari[0].interactable = false;
                 }
 
@@ -444,9 +470,9 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                 Material[] mats = _Renderer.materials;
                 mats[0] = Materialler[MaterialIndex];
                 _Renderer.materials = mats;
-                MaterialText.text = "Tema Yok";
+                MaterialText.text = ItemText;
 
-                SatinalmaText.text = "SATIN AL";
+                Text[5].text = SatinalmaText;
                 IslemButonlari[0].interactable = false;
             }
 
@@ -477,7 +503,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
         IslemPanalleri[IslemPanelindex].SetActive(false);
         DurumuKontrolEt(IslemPanelindex, true);
         IslemPanelindex = -1;
-        SatinalmaText.text = "SATIN AL";
+        Text[5].text = SatinalmaText;
         _VeriYonetim.Save(_ItemBilgileri);
     }
     void DurumuKontrolEt(int Bolum, bool islem = false)
@@ -497,7 +523,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                 if (!islem)
                 {
                     SapkaIndex = -1;
-                    SapkaText.text = "Sapka Yok";
+                    SapkaText.text = ItemText;
                 }
 
             }
@@ -512,7 +538,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                 Sapkalar[SapkaIndex].SetActive(true);
 
                 SapkaText.text = _ItemBilgileri[SapkaIndex].ItemAd;
-                SatinalmaText.text = "SATIN AL";
+                Text[5].text = SatinalmaText;
                 IslemButonlari[0].interactable = false;
                 IslemButonlari[1].interactable = true;
             }
@@ -532,7 +558,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                 if (!islem)
                 {
                     SopaIndex = -1;
-                    SopaText.text = "Sopka Yok";
+                    SopaText.text = ItemText;
                 }
             }
             else
@@ -545,7 +571,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                 SopaIndex = _BellekYonetim.VeriOku_i("AktifSopa");
                 Sopalar[SopaIndex].SetActive(true);
                 SopaText.text = _ItemBilgileri[SopaIndex + 3].ItemAd;
-                SatinalmaText.text = "SATIN AL";
+                Text[5].text = SatinalmaText;
                 IslemButonlari[0].interactable = false;
                 IslemButonlari[1].interactable = true;
             }
@@ -560,7 +586,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                 if (!islem)
                 {
                     MaterialIndex = -1;
-                    MaterialText.text = "Tema Yok";
+                    MaterialText.text = ItemText;
                     IslemButonlari[0].interactable = false;
                     IslemButonlari[1].interactable = false;
                 }
@@ -581,7 +607,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
                 _Renderer.materials = mats;
 
                 MaterialText.text = _ItemBilgileri[MaterialIndex + 6].ItemAd;
-                SatinalmaText.text = "SATIN AL";
+                Text[5].text = SatinalmaText;
                 IslemButonlari[0].interactable = false;
                 IslemButonlari[1].interactable = true;
             }
@@ -592,7 +618,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
     public void AnaMenuyeDon()
     {
         ButonSes[0].Play();
-        SatinalmaText.text = "SATIN AL";
+        Text[5].text = SatinalmaText;
         _VeriYonetim.Save(_ItemBilgileri);
 
 
@@ -645,7 +671,7 @@ public class OzellestimeManager : MonoBehaviour, IOzellestimeManager
     {
         _ItemBilgileri[index].SatinAlmaDurumu = true;
         _BellekYonetim.VeriKaydet_int("Puan", _BellekYonetim.VeriOku_i("Puan") - _ItemBilgileri[index].Puan);
-        SatinalmaText.text = "SATIN AL";
+        Text[5].text = SatinalmaText;
         IslemButonlari[0].interactable = false;
         IslemButonlari[1].interactable = true;
         PuanText.text = _BellekYonetim.VeriOku_i("Puan").ToString();

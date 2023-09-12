@@ -263,6 +263,8 @@ namespace Yilmaz
                 PlayerPrefs.SetFloat("OyunSes", 1);
                 PlayerPrefs.SetFloat("MenuSes", 1);
 
+                PlayerPrefs.SetString("Dil", "TR");
+
             }
         }
 
@@ -290,13 +292,21 @@ namespace Yilmaz
 
 
         }
-        public void IlkKurulum(List<ItemBilgileri> _ItemBilgileri)
+        public void IlkKurulum(List<ItemBilgileri> _ItemBilgileri, List<DilVerileri> _DilVerileri)
         {
             if (!File.Exists(Application.persistentDataPath + "/ItemVerileri.gd"))
             {
                 BinaryFormatter bf = new BinaryFormatter();
                 FileStream file = File.Create(Application.persistentDataPath + "/ItemVerileri.gd");
                 bf.Serialize(file, _ItemBilgileri);
+                file.Close();
+
+            }
+            if (!File.Exists(Application.persistentDataPath + "/DilVerileri.gd"))
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                FileStream file = File.Create(Application.persistentDataPath + "/DilVerileri.gd");
+                bf.Serialize(file, _DilVerileri);
                 file.Close();
 
             }
@@ -315,11 +325,39 @@ namespace Yilmaz
             }
         }
 
+        List<DilVerileri> _DilVerileriListe;
+        public void Dil_Load()
+        {
+            if (File.Exists(Application.persistentDataPath + "/DilVerileri.gd"))
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                FileStream file = File.Open(Application.persistentDataPath + "/DilVerileri.gd", FileMode.Open);
+                _DilVerileriListe = (List<DilVerileri>)bf.Deserialize(file);
+                file.Close();
+
+            }
+        }
+        public List<DilVerileri> DilVerileriListeyeAktar()
+        {
+            return _DilVerileriListe;
+        }
+
         public List<ItemBilgileri> ListeyeAktar()
         {
             return _Itemiclist;
 
         }
+    }
+    [Serializable]
+    public class DilVerileri
+    {  
+        public List<DilVerileri_TR> _Dilverileri_TR=new List<DilVerileri_TR>();
+        public List<DilVerileri_TR> _Dilverileri_EN=new List<DilVerileri_TR>();
+    }
+    [Serializable]
+    public class DilVerileri_TR
+    {
+        public string Metin;
     }
 }
 

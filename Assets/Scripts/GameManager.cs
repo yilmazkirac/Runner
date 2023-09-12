@@ -5,6 +5,7 @@ using UnityEngine;
 using Yilmaz;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -34,79 +35,125 @@ public class GameManager : MonoBehaviour
 
     Matematiksel_islemler _Matematiksel_Islemler = new Matematiksel_islemler();
     BellekYonetim _BellekYonetim = new BellekYonetim();
-
+    VeriYonetim _VeriYonetim = new VeriYonetim();
     Scene _Scene;
 
     public AudioSource[] OyunSesleri;
 
     public GameObject[] IslemPanalleri;
     public Slider Sesayar;
+    bool cikisBool;
 
-    bool ayar=false;
+    List<DilVerileri> _DilOkunanVerileri = new List<DilVerileri>();
+    public List<DilVerileri> _DilTercihi = new List<DilVerileri>();
+    public TextMeshProUGUI[] Text;
+    bool ayar = false;
+    public Slider LoadSlider;
+    public GameObject LoadingScene;
     private void Awake()
     {
-        OyunSesleri[0].volume=_BellekYonetim.VeriOku_f("OyunSes");
-        Sesayar.value= _BellekYonetim.VeriOku_f("OyunSes");
-        OyunSesleri[1].volume=_BellekYonetim.VeriOku_f("MenuFx");
+        OyunSesleri[0].volume = _BellekYonetim.VeriOku_f("OyunSes");
+        Sesayar.value = _BellekYonetim.VeriOku_f("OyunSes");
+        OyunSesleri[1].volume = _BellekYonetim.VeriOku_f("MenuFx");
         Destroy(GameObject.FindWithTag("MenuMusic"));
         ItemKontrol();
     }
     void Start()
     {
 
+        _VeriYonetim.Dil_Load();
+        _DilOkunanVerileri = _VeriYonetim.DilVerileriListeyeAktar();
+        _DilTercihi.Add(_DilOkunanVerileri[5]);
+        DiltercihiYonetimi();
         DusmanlariOlustur();
         AnlikKarakterSayisi = 1;
         _Scene = SceneManager.GetActiveScene();
 
     }
-    public void CikisBtnIslem(string durum)
+    IEnumerator LoadAsync(int SceneIndex)
     {
-        OyunSesleri[1].Play();
-        Time.timeScale = 0;
-        if (durum == "durdur")
+        AsyncOperation Op = SceneManager.LoadSceneAsync(SceneIndex);
+        LoadingScene.SetActive(true);
+        while (!Op.isDone)
         {
-            IslemPanalleri[0].SetActive(true);
+            float progress = Mathf.Clamp01(Op.progress / .9f);
+            LoadSlider.value = progress;
+            yield return null;
         }
-        
-
-         else if (durum == "devamet")
-        {
-            IslemPanalleri[0].SetActive(false);
-            Time.timeScale = 1;
-        }
-
-        else if (durum == "tekrar")
-        {
-            SceneManager.LoadScene(_Scene.buildIndex);
-            Time.timeScale = 1;
-        }
-        else if (durum == "anasayfa")
-        {
-            SceneManager.LoadScene(0);
-            Time.timeScale = 1;
-        }
-
     }
-    public void Sesiayarla()
+    public void DiltercihiYonetimi()
     {
-        _BellekYonetim.VeriKaydet_float("OyunSes",Sesayar.value);
-        OyunSesleri[0].volume=Sesayar.value;
-    }
-    public void Ayarlar()
-    {
-        
-        if (!ayar)
+        if (_BellekYonetim.VeriOku_s("Dil") == "TR")
         {
-            IslemPanalleri[1].SetActive(true);
-            Time.timeScale = 0;
-            ayar =true;
+            for (int i = 0; i < Text.Length; i++)
+            {
+                Text[i].text = _DilTercihi[0]._Dilverileri_TR[i].Metin;
+            }
         }
         else
         {
-            IslemPanalleri[1].SetActive(false);
-            Time.timeScale = 1;
-            ayar=false;
+            for (int i = 0; i < Text.Length; i++)
+            {
+                Text[i].text = _DilTercihi[0]._Dilverileri_EN[i].Metin;
+            }
         }
+    }
+    public void CikisBtnIslem(string durum)
+    {
+        if (!ayar)
+        {
+            OyunSesleri[1].Play();
+            Time.timeScale = 0;
+            if (durum == "durdur")
+            {
+                IslemPanalleri[0].SetActive(true);
+                cikisBool=true;
+            }
+
+
+            else if (durum == "devamet")
+            {
+                IslemPanalleri[0].SetActive(false);
+                Time.timeScale = 1;
+                cikisBool =false;
+            }
+
+            else if (durum == "tekrar")
+            {
+                SceneManager.LoadScene(_Scene.buildIndex);
+                Time.timeScale = 1;
+            }
+            else if (durum == "anasayfa")
+            {
+                SceneManager.LoadScene(0);
+                Time.timeScale = 1;
+            }
+        }
+    }
+    public void Sesiayarla()
+    {
+        _BellekYonetim.VeriKaydet_float("OyunSes", Sesayar.value);
+        OyunSesleri[0].volume = Sesayar.value;
+    }
+    public void Ayarlar()
+    {
+        if (!cikisBool)
+        {
+            if (!ayar)
+            {
+                IslemPanalleri[1].SetActive(true);
+                Time.timeScale = 0;
+                ayar = true;
+
+            }
+            else
+            {
+                IslemPanalleri[1].SetActive(false);
+                Time.timeScale = 1;
+                ayar = false;
+            }
+        }
+ 
 
     }
     void SavasDurumu()
@@ -142,7 +189,7 @@ public class GameManager : MonoBehaviour
                 if (AnlikKarakterSayisi < KacDusmanOlsun || AnlikKarakterSayisi == KacDusmanOlsun)
                 {
 
-                    Debug.Log("Kaybettin");
+                    IslemPanalleri[3].SetActive(true);
                 }
                 else
                 {
@@ -150,7 +197,7 @@ public class GameManager : MonoBehaviour
 
                     if (_Scene.buildIndex == _BellekYonetim.VeriOku_i("SonLevel"))
                         _BellekYonetim.VeriKaydet_int("SonLevel", _BellekYonetim.VeriOku_i("SonLevel") + 1);
-                    Debug.Log("Kazandin");
+                    IslemPanalleri[2].SetActive(true);
                 }
             }
         }
@@ -252,5 +299,9 @@ public class GameManager : MonoBehaviour
             _Renderer.materials = mats;
         }
     }
+    public void SonrakiLevel()
+    {
+        StartCoroutine(LoadAsync(_Scene.buildIndex + 1));
 
+    }
 }
