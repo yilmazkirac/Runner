@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Leveller/Lvl1.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Leveller/Lvl2.unity
+    guid: 20f926f08c3090440a178453030118df
   m_configObjects: {}
