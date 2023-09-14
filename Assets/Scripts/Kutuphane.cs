@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-
-
+using GoogleMobileAds.Api;
 namespace Yilmaz
 {
     public class Matematiksel_islemler
@@ -264,7 +262,7 @@ namespace Yilmaz
                 PlayerPrefs.SetFloat("MenuSes", 1);
 
                 PlayerPrefs.SetString("Dil", "TR");
-
+                PlayerPrefs.SetInt("GecisReklamiSayisi", 0);
             }
         }
 
@@ -350,14 +348,159 @@ namespace Yilmaz
     }
     [Serializable]
     public class DilVerileri
-    {  
-        public List<DilVerileri_TR> _Dilverileri_TR=new List<DilVerileri_TR>();
-        public List<DilVerileri_TR> _Dilverileri_EN=new List<DilVerileri_TR>();
+    {
+        public List<DilVerileri_TR> _Dilverileri_TR = new List<DilVerileri_TR>();
+        public List<DilVerileri_TR> _Dilverileri_EN = new List<DilVerileri_TR>();
     }
     [Serializable]
     public class DilVerileri_TR
     {
         public string Metin;
     }
-}
+
+    public class ReklamYonetimi
+    {
+
+#if UNITY_ANDROID
+        private string _adUnitId = "ca-app-pub-3963511488694816/2147272959";
+#elif UNITY_IPHONE
+  private string _adUnitId = "ca-app-pub-3940256099942544/4411468910";
+#else
+  private string _adUnitId = "unused";
+#endif
+
+
+#if UNITY_ANDROID
+        private string _adRwerdId = "ca-app-pub-3963511488694816/9751550367";
+#elif UNITY_IPHONE
+  private string _adRwerdId = "ca-app-pub-3940256099942544/4411468910";
+#else
+  private string _adRwerdId = "unused";
+#endif
+
+        private InterstitialAd interstitialAd;
+        private RewardedAd rewardedAd;
+        public delegate void OnReward();
+        public static event OnReward OnGaveReward;
+
+        //geçis
+
+        public void LoadInterstitialAd()
+        {
+          
+       
+     
+            if (interstitialAd != null)
+            {
+                interstitialAd.Destroy();
+                interstitialAd = null;
+            }
+            var adRequest = new AdRequest();
+            InterstitialAd.Load(_adUnitId, adRequest,
+                (InterstitialAd ad, LoadAdError error) =>
+                {
+                    if (error != null || ad == null)
+                    {
+                        Debug.LogError("interstitial ad failed to load an ad " +
+                                       "with error : " + error);
+                        return;
+                    }
+
+                    Debug.Log("Interstitial ad loaded with response : "
+                              + ad.GetResponseInfo());
+
+                    interstitialAd = ad;
+                });
+            RegisterEventHandlers(interstitialAd);
+        }
+        public void ShowAd()
+        {
+
+            if (PlayerPrefs.GetInt("GecisReklamiSayisi")==2)
+            {
+                if (interstitialAd != null && interstitialAd.CanShowAd())
+                {
+                    PlayerPrefs.SetInt("GecisReklamiSayisi", 0);
+                    interstitialAd.Show();
+                }
+                else
+                {
+                }
+            }
+            else
+            {
+                PlayerPrefs.SetInt("GecisReklamiSayisi", PlayerPrefs.GetInt("GecisReklamiSayisi")+1);
+            }
+
+        
+        }
+        private void RegisterEventHandlers(InterstitialAd ad)
+        {
+            ad.OnAdFullScreenContentClosed += () =>
+            {
+                LoadInterstitialAd();
+            };
+        }
+
+
+
+        //ödüllü
+
+        public void LoadRewardedAd()
+        {
+            if (rewardedAd != null)
+            {
+                rewardedAd.Destroy();
+                rewardedAd = null;
+            }
+            var adRequest = new AdRequest();
+
+            RewardedAd.Load(_adRwerdId, adRequest,
+                (RewardedAd ad, LoadAdError error) =>
+                {
+                    if (error != null || ad == null)
+                    {
+                        Debug.LogError("Rewarded ad failed to load an ad " +
+                                       "with error : " + error);
+                        return;
+                    }
+
+                    Debug.Log("Rewarded ad loaded with response : "
+                              + ad.GetResponseInfo());
+
+                    rewardedAd = ad;
+                });
+            RegisterEventHandlers(rewardedAd);
+
+
+
+        }
+  
+            public void ShowRewardedAd()
+        {
+            if (rewardedAd != null && rewardedAd.CanShowAd())
+            {
+                rewardedAd.Show((Reward reward) =>
+                {
+                    OnGaveReward?.Invoke();
+                });
+            }
+        }
+        private void RegisterEventHandlers(RewardedAd ad)
+        {
+            ad.OnAdFullScreenContentClosed += () =>
+            {
+                LoadRewardedAd();
+            };
+          
+        }
+
+   
+
+        }
+    }
+
+
+
+
 

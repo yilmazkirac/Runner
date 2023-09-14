@@ -11,6 +11,7 @@ public class Anamenu_Manager : MonoBehaviour
     public GameObject CikisPaneli;
   
     BellekYonetim _BellekYonetim = new BellekYonetim();
+    ReklamYonetimi _ReklamYonetimi = new ReklamYonetimi();
     VeriYonetim _VeriYonetim = new VeriYonetim();
     public List<ItemBilgileri> _Varsayilan_ItemBilgileri = new List<ItemBilgileri>();
 
@@ -33,6 +34,9 @@ public class Anamenu_Manager : MonoBehaviour
         _DilOkunanVerileri = _VeriYonetim.DilVerileriListeyeAktar();
         _DilTercihi.Add(_DilOkunanVerileri[0]);
         DiltercihiYonetimi();
+
+       
+
     }
     public void DiltercihiYonetimi()
     {

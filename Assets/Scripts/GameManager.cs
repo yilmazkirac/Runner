@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
 
     Matematiksel_islemler _Matematiksel_Islemler = new Matematiksel_islemler();
     BellekYonetim _BellekYonetim = new BellekYonetim();
+    ReklamYonetimi _ReklamYonetimi = new ReklamYonetimi();
     VeriYonetim _VeriYonetim = new VeriYonetim();
     Scene _Scene;
 
@@ -68,6 +69,12 @@ public class GameManager : MonoBehaviour
         DusmanlariOlustur();
         AnlikKarakterSayisi = 1;
         _Scene = SceneManager.GetActiveScene();
+
+
+
+        _ReklamYonetimi.LoadInterstitialAd();
+        _ReklamYonetimi.LoadRewardedAd();
+ 
 
     }
     IEnumerator LoadAsync(int SceneIndex)
@@ -185,11 +192,12 @@ public class GameManager : MonoBehaviour
                     }
                 }
                 AnaKarakter.GetComponent<Animator>().SetBool("Saldir", false);
-
+                _ReklamYonetimi.ShowAd();
                 if (AnlikKarakterSayisi < KacDusmanOlsun || AnlikKarakterSayisi == KacDusmanOlsun)
                 {
 
                     IslemPanalleri[3].SetActive(true);
+               
                 }
                 else
                 {
@@ -198,6 +206,7 @@ public class GameManager : MonoBehaviour
                     if (_Scene.buildIndex == _BellekYonetim.VeriOku_i("SonLevel"))
                         _BellekYonetim.VeriKaydet_int("SonLevel", _BellekYonetim.VeriOku_i("SonLevel") + 1);
                     IslemPanalleri[2].SetActive(true);
+                  
                 }
             }
         }
@@ -303,5 +312,10 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(LoadAsync(_Scene.buildIndex + 1));
 
+    }
+    public void OdulluReklam()
+    {
+        _ReklamYonetimi.ShowRewardedAd();
+        PlayerPrefs.SetInt("Puan", PlayerPrefs.GetInt("Puan") + 100);
     }
 }
