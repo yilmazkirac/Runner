@@ -33,10 +33,10 @@ public class GameManager : MonoBehaviour
     public bool OyunBittimi;
     bool SonaGeldikmi = false;
 
-    Matematiksel_islemler _Matematiksel_Islemler = new Matematiksel_islemler();
-    BellekYonetim _BellekYonetim = new BellekYonetim();
+    Matematiksel_islemler _Matematiksel_Islemler = new Matematiksel_islemler();  
     ReklamYonetimi _ReklamYonetimi = new ReklamYonetimi();
     VeriYonetim _VeriYonetim = new VeriYonetim();
+    BellekYonetim _BellekYonetim = new BellekYonetim();
     Scene _Scene;
 
     public AudioSource[] OyunSesleri;

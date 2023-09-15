@@ -362,7 +362,7 @@ namespace Yilmaz
     {
 
 #if UNITY_ANDROID
-        private string _adUnitId = "ca-app-pub-3963511488694816/2147272959";
+        private string _adUnitId = "ca-app-pub-3940256899942544/1833173712";
 #elif UNITY_IPHONE
   private string _adUnitId = "ca-app-pub-3940256099942544/4411468910";
 #else
@@ -371,7 +371,7 @@ namespace Yilmaz
 
 
 #if UNITY_ANDROID
-        private string _adRwerdId = "ca-app-pub-3963511488694816/9751550367";
+        private string _adRwerdId = "ca-app-pub-3940256899942544/5224354917";
 #elif UNITY_IPHONE
   private string _adRwerdId = "ca-app-pub-3940256099942544/4411468910";
 #else
