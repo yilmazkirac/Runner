@@ -2,6 +2,7 @@ Egitim surecimde gelistirdigim runner tipi bir oyun.
 
   Icerigi:
   Runner oyun mekanikleri.
+  
   Obje havuzu sistemi.
   Nesne yonelimli programlama.
   Yapay Zeka.
