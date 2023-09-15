@@ -1,6 +1,6 @@
 Egitim surecimde gelistirdigim runner tipi bir oyun.
 
-  Icerigi:
+ Oyunun icerigi:
   
   Runner oyun mekanikleri.
   
