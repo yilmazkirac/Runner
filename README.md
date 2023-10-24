@@ -1,32 +1,7 @@
-Egitim surecimde gelistirdigim runner tipi bir oyun.
+# Runner
 
- Oyunun icerigi:
-  
-  Runner oyun mekanikleri.
-  
-  Obje havuzu sistemi.
-  
-  Nesne yonelimli programlama.
-  
-  Yapay Zeka.
-  
-  Occulusion.
-  
-  Cesitli optimizasyon ve sikistirma islemleri.
-  
-  Level secme ve degistirme.
-  
-  Puan kazanma harcama sistemi.
-  
-  Envanterinden kiyafet satin alim ve giyme mekanikleri.
-  
-  Ayarlar menusu sesleri kontrol edebilme.
-  
-  Dosya sistemi ile item ve dil verilerini okuma.
-  
-  Coklu dil sistemi.
-  
-  Google admob reklam entegrasyonu.
-  
-  GooglePlay Satin alim entegrasyonu.
-  
+
+ 
+
+https://github.com/yilmazkirac/Runner/assets/116847038/7dc069be-ebf0-4393-810e-a0c1c015fd4a
+
